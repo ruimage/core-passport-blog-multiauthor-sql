@@ -4,8 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node app.js",
-    "dev": "nodemon app.js --ignore sessions",
-    "seed": "node ./seeders/entry-seeds.js"
+    "dev": "nodemon app.js --ignore sessions"
   },
   "dependencies": {
     "express": "^4.17.1",
