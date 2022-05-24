@@ -1,80 +1,122 @@
+const ReactDOMServer = require('react-dom/server');
+const React = require('react');
 const router = require('express').Router();
-const {Entry} = require('../db/models/');
+
+const EntriesList = require('../views/entries/EntriesList');
+const EditEntry = require('../views/entries/EditEntry');
+const NewEntry = require('../views/entries/NewEntry');
+const ShowEntry = require('../views/entries/ShowEntry');
+const Error = require('../views/Error');
+
+const { Entry } = require('../db/models');
 
 router.get('/', async (req, res) => {
-  let entries;
-
   try {
-    entries = await Entry.findAll({order:[['id', 'DESC']]});
-  } catch (error) {
-    return res.render('error', {
-      message: 'Не удалось получить записи из базы данных.',
-      error: {}
-    });
-  }
+    const entries = await Entry.findAll({ order: [['id', 'DESC']] });
 
-  return res.render('entries/index', { entries });
+    const entriesList = React.createElement(EntriesList, { entries });
+    const html = ReactDOMServer.renderToStaticMarkup(entriesList);
+    res.write('<!DOCTYPE html>');
+    res.end(html);
+  } catch (error) {
+    const errorPage = React.createElement(Error, {
+      message: 'Не удалось получить записи из базы данных.',
+      error: {},
+    });
+    const html = ReactDOMServer.renderToStaticMarkup(errorPage);
+    res.write('<!DOCTYPE html>');
+    res.end(html);
+  }
 });
 
 router.post('/', async (req, res) => {
-  
   try {
-    const newEntry = await Entry.create({ title: req.body.title, body: req.body.body },{returning: true,plain: true});
-    return res.redirect(`/entries/${newEntry.id}`);
-  } catch (error) {
-    res.render('error', {
-      message: 'Не удалось добавить запись в базу данных.',
-      error: {}
+    const newEntry = await Entry.create({
+      title: req.body.title,
+      body: req.body.body,
+    }, {
+      returning: true,
+      plain: true,
     });
-  }
 
-  return res.redirect(`/entries/${newEntry.id}`);
+    res.redirect(`/entries/${newEntry.id}`);
+  } catch (error) {
+    const errorPage = React.createElement(Error, {
+      message: 'Не удалось добавить запись в базу данных.',
+      error: {},
+    });
+
+    const html = ReactDOMServer.renderToStaticMarkup(errorPage);
+    res.write('<!DOCTYPE html>');
+    res.end(html);
+  }
 });
 
 router.get('/new', (req, res) => {
-  res.render('entries/new');
+  const newEntry = React.createElement(NewEntry, {});
+  const html = ReactDOMServer.renderToStaticMarkup(newEntry);
+  res.write('<!DOCTYPE html>');
+  res.end(html);
 });
 
 router.get('/:id', async (req, res) => {
-  let entry;
-
   try {
-    entry = await Entry.findOne({where:{id:req.params.id}});
+    const entry = await Entry.findOne({ where: { id: req.params.id } });
+    const showEntry = React.createElement(ShowEntry, { entry });
+    const html = ReactDOMServer.renderToStaticMarkup(showEntry);
+    res.write('<!DOCTYPE html>');
+    res.end(html);
   } catch (error) {
-    return res.render('error', {
+    const errorPage = React.createElement(Error, {
       message: 'Не удалось получить запись из базы данных.',
-      error: {}
+      error: {},
     });
-  }
 
-  return res.render('entries/show', { entry });
+    const html = ReactDOMServer.renderToStaticMarkup(errorPage);
+    res.write('<!DOCTYPE html>');
+    res.end(html);
+  }
 });
 
 router.put('/:id', async (req, res) => {
-  let entry;
-
   try {
-    entry = await Entry.update({ title: req.body.title, body: req.body.body },{where:{id:req.params.id}, returning: true, plain: true});
-  } catch (error) {
-    return res.json({ isUpdateSuccessful: false, errorMessage: 'Не удалось обновить запись в базе данных.' });
-  }
+    const entry = await Entry.update({
+      title: req.body.title,
+      body: req.body.body,
+    }, {
+      where: { id: req.params.id },
+      returning: true,
+      plain: true,
+    });
 
-  return res.json({ isUpdateSuccessful: true, entryID: entry[1].id });
+    res.json({ isUpdateSuccessful: true, entryID: entry[1].id });
+  } catch (error) {
+    res.json({
+      isUpdateSuccessful: false,
+      errorMessage: 'Не удалось обновить запись в базе данных.',
+    });
+  }
 });
 
 router.delete('/:id', async (req, res) => {
   try {
-    await Entry.destroy({where:{id:req.params.id}});
+    await Entry.destroy({ where: { id: req.params.id } });
+    res.json({ isDeleteSuccessful: true });
   } catch (error) {
-    return res.json({ isDeleteSuccessful: false, errorMessage: 'Не удалось удалить запись из базы данных.' });
+    res.json({
+      isDeleteSuccessful: false,
+      errorMessage: 'Не удалось удалить запись из базы данных.',
+    });
   }
-
-  return res.json({ isDeleteSuccessful: true });
 });
 
 router.get('/:id/edit', async (req, res) => {
-  let entry = await Entry.findOne({where:{id:req.params.id}});
-  res.render('entries/edit', { entry });
+  const entry = await Entry.findOne({ where: { id: req.params.id } });
+
+  const editEntry = React.createElement(EditEntry, { entry });
+  const html = ReactDOMServer.renderToStaticMarkup(editEntry);
+  res.write('<!DOCTYPE html>');
+  res.end(html);
 });
 
 module.exports = router;
