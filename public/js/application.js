@@ -7,12 +7,12 @@ if (editEntryForm) {
     const response = await fetch(`/entries/${event.target.dataset.entryid}`, {
       method: 'PUT',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         title: event.target.title.value,
-        body: event.target.body.value
-      })
+        body: event.target.body.value,
+      }),
     });
 
     const responseJson = await response.json();
@@ -32,7 +32,7 @@ if (editEntryForm) {
 if (deleteEntryButton) {
   deleteEntryButton.addEventListener('click', async (event) => {
     const response = await fetch(`/entries/${event.target.dataset.entryid}`, {
-      method: 'DELETE'
+      method: 'DELETE',
     });
 
     const responseJson = await response.json();
