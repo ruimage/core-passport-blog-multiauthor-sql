@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node app.js",
-    "dev": "nodemon app.js --ignore sessions"
+    "dev": "nodemon app.js --ext js,jsx --ignore sessions"
   },
   "dependencies": {
     "@babel/core": "^7.17.12",
