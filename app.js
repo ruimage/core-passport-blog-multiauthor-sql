@@ -9,6 +9,8 @@ const logger = require('morgan');
 const path = require('path');
 
 // Импортируем созданный в отдельный файлах рутеры.
+const session = require('express-session');
+const FileStore = require('session-file-store')(session);
 const indexRouter = require('./routes/index');
 const entriesRouter = require('./routes/entries');
 const authRouter = require('./routes/auth');
@@ -16,6 +18,21 @@ const Error = require('./views/Error');
 
 const app = express();
 const PORT = 3000;
+
+// Конфигурация сессии
+const sessionConfig = {
+  // сессии будут храниться в файлах
+  store: new FileStore(),
+  name: 'user_sid', // Имя куки для хранения id сессии. По умолчанию - connect.sid
+  secret: process.env.SESSION_SECRET ?? 'G(8x>|Ai^"+&', // Секретное слово для шифрования, может быть любым
+  resave: false, // Пересохранять ли куку при каждом запросе
+  saveUninitialized: false, // Создавать ли сессию без инициализации ключей в req.session
+  cookie: {
+    maxAge: 1000 * 60 * 60 * 12, // Срок истечения годности куки в миллисекундах
+    httpOnly: true, // Серверная установка и удаление куки, по умолчанию true
+    // path: '/count'
+  },
+};
 
 // Подключаем middleware morgan с режимом логирования "dev", чтобы для каждого HTTP-запроса на
 // сервер в консоль выводилась информация об этом запросе.
@@ -29,6 +46,9 @@ app.use(express.urlencoded({ extended: true }));
 // Подключаем middleware, которое позволяет читать переменные JavaScript, сохранённые
 // в формате JSON в body HTTP - запроса.
 app.use(express.json());
+
+// миддлварка для работы с сессиями
+app.use(session(sessionConfig));
 
 app.use('/', indexRouter);
 app.use('/entries', entriesRouter);
