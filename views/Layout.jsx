@@ -5,6 +5,7 @@ module.exports = function Layout({ children }) {
     <html lang="en">
 
       <head>
+        <meta charSet="utf-8"/>
         <link rel="stylesheet" href="/stylesheets/normalize.css" />
         <link rel="stylesheet" href="/stylesheets/application.css" />
 
@@ -18,7 +19,10 @@ module.exports = function Layout({ children }) {
           <div className="max-w-700 center wrap-float">
             <nav className="clearfix mar-b-1">
               <ul className="no-bullets no-margin no-padding right">
+                <li className="pipe-separate t-light-green left"><a href="/register">register</a></li>
+                <li className="pipe-separate t-light-green left"><a href="/login">login</a></li>
                 <li className="pipe-separate t-light-green left"><a href="/">home</a></li>
+
               </ul>
             </nav>
 
