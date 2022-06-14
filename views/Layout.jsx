@@ -22,6 +22,9 @@ module.exports = function Layout({ username, children }) {
                 {username && (
                 <li className="pipe-separate t-light-green left"><a href="">{username}</a></li>
                 )}
+                {username && (
+                <li className="pipe-separate t-light-green left"><a href="/auth/logout">logout</a></li>
+                )}
 
                 {!username && (
                   <li className="pipe-separate t-light-green left"><a href="/auth/register">register</a></li>

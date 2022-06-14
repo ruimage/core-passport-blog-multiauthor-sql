@@ -71,6 +71,21 @@ router.get('/login', async (req, res) => {
   }
 });
 
+router.get('/logout', async (req, res) => {
+  try {
+    await req.session.destroy();
+    res.redirect('/');
+  } catch (error) {
+    const errorPage = React.createElement(Error, {
+      message: 'Не удалось открыть страницу регистрации',
+      error: {},
+    });
+    const html = ReactDOMServer.renderToStaticMarkup(errorPage);
+    res.write('<!DOCTYPE html>');
+    res.end(html);
+  }
+});
+
 router.post('/login', async (req, res) => {
   try {
     const { username, password } = req.body;
