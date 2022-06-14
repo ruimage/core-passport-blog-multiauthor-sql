@@ -6,8 +6,15 @@ module.exports = function ShowEntry({ entry }) {
     <Layout>
       <h1>{entry.title}</h1>
 
-      <span className="entry-date block font-3-4 c-lt-gray">Written on {entry.createdAt}</span>
-      <p>{entry.body}</p>
+      <span className="entry-date block font-3-4 c-lt-gray">
+        Written on
+        {entry.createdAt.toString()}
+      </span>
+      <p>
+        `
+        {entry.body}
+        `
+      </p>
 
       <ul id="editAndDeleteUl" className="no-bullets no-padding mar-t-2">
         <li className="pipe-separate left">
