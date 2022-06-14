@@ -16,12 +16,14 @@ module.exports = function ShowEntry({ username, entry }) {
         `
       </p>
 
+      {username && (
       <ul id="editAndDeleteUl" className="no-bullets no-padding mar-t-2">
         <li className="pipe-separate left">
           <a href={`/entries/${entry.id}/edit`} className="c-white">edit</a>
         </li>
 
         <li className="pipe-separate left">
+
           <button
             id="deleteEntryButton"
             data-entryid={entry.id}
@@ -31,8 +33,10 @@ module.exports = function ShowEntry({ username, entry }) {
           >
             delete
           </button>
+
         </li>
       </ul>
+      )}
     </Layout>
   );
 };
