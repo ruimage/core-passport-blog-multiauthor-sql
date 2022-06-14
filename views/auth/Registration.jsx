@@ -1,9 +1,9 @@
 const React = require('react');
 const Layout = require('../Layout');
 
-module.exports = function Registration() {
+module.exports = function Registration({ username }) {
   return (
-    <Layout>
+    <Layout username={username}>
       <form action="/auth/register" method="POST">
         <input
           type="text"

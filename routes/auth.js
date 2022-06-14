@@ -77,6 +77,7 @@ router.post('/login', async (req, res) => {
     const existingUser = await User.findOne({ where: { username } });
     if (existingUser && bcrypt.compare(password, existingUser.password)) {
       req.session.userId = existingUser.id;
+      req.session.username = existingUser.username;
       res.redirect('/');
     }
   } catch (error) {

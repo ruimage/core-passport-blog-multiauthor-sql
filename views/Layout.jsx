@@ -1,6 +1,6 @@
 const React = require('react');
 
-module.exports = function Layout({ children }) {
+module.exports = function Layout({ username, children }) {
   return (
     <html lang="en">
 
@@ -19,10 +19,18 @@ module.exports = function Layout({ children }) {
           <div className="max-w-700 center wrap-float">
             <nav className="clearfix mar-b-1">
               <ul className="no-bullets no-margin no-padding right">
-                <li className="pipe-separate t-light-green left"><a href="/auth/register">register</a></li>
-                <li className="pipe-separate t-light-green left"><a href="/auth/login">login</a></li>
-                <li className="pipe-separate t-light-green left"><a href="/">home</a></li>
+                {username && (
+                <li className="pipe-separate t-light-green left"><a href="">{username}</a></li>
+                )}
 
+                {!username && (
+                  <li className="pipe-separate t-light-green left"><a href="/auth/register">register</a></li>
+                )}
+                {!username && (
+                  <li className="pipe-separate t-light-green left"><a href="/auth/login">login</a></li>
+                )}
+
+                <li className="pipe-separate t-light-green left"><a href="/">home</a></li>
               </ul>
             </nav>
 

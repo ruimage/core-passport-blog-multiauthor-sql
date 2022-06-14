@@ -1,10 +1,10 @@
 const React = require('react');
 const Layout = require('../Layout');
 
-module.exports = function Login() {
+module.exports = function Login({ username }) {
   return (
-    <Layout>
-      <form action="/auth/login" method="GET">
+    <Layout username={username}>
+      <form action="/auth/login" method="POST">
         <input
           type="text"
           name="username"

@@ -14,7 +14,8 @@ router.get('/', async (req, res) => {
   try {
     const entries = await Entry.findAll({ order: [['id', 'DESC']] });
 
-    const entriesList = React.createElement(EntriesList, { entries });
+    const { username } = req.session;
+    const entriesList = React.createElement(EntriesList, { username, entries });
     const html = ReactDOMServer.renderToStaticMarkup(entriesList);
     res.write('<!DOCTYPE html>');
     res.end(html);
@@ -45,15 +46,16 @@ router.post('/', async (req, res) => {
       message: 'Не удалось добавить запись в базу данных.',
       error: {},
     });
-
-    const html = ReactDOMServer.renderToStaticMarkup(errorPage);
+    const { username } = req.session;
+    const html = ReactDOMServer.renderToStaticMarkup(username, errorPage);
     res.write('<!DOCTYPE html>');
     res.end(html);
   }
 });
 
 router.get('/new', (req, res) => {
-  const newEntry = React.createElement(NewEntry, {});
+  const { username } = req.session;
+  const newEntry = React.createElement(NewEntry, { username });
   const html = ReactDOMServer.renderToStaticMarkup(newEntry);
   res.write('<!DOCTYPE html>');
   res.end(html);
@@ -62,7 +64,8 @@ router.get('/new', (req, res) => {
 router.get('/:id', async (req, res) => {
   try {
     const entry = await Entry.findOne({ where: { id: req.params.id } });
-    const showEntry = React.createElement(ShowEntry, { entry });
+    const { username } = req.session;
+    const showEntry = React.createElement(ShowEntry, { username, entry });
     const html = ReactDOMServer.renderToStaticMarkup(showEntry);
     res.write('<!DOCTYPE html>');
     res.end(html);
@@ -113,7 +116,8 @@ router.delete('/:id', async (req, res) => {
 router.get('/:id/edit', async (req, res) => {
   const entry = await Entry.findOne({ where: { id: req.params.id } });
 
-  const editEntry = React.createElement(EditEntry, { entry });
+  const { username } = req.session;
+  const editEntry = React.createElement(EditEntry, { username, entry });
   const html = ReactDOMServer.renderToStaticMarkup(editEntry);
   res.write('<!DOCTYPE html>');
   res.end(html);

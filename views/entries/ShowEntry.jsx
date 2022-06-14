@@ -1,9 +1,9 @@
 const React = require('react');
 const Layout = require('../Layout');
 
-module.exports = function ShowEntry({ entry }) {
+module.exports = function ShowEntry({ username, entry }) {
   return (
-    <Layout>
+    <Layout username={username}>
       <h1>{entry.title}</h1>
 
       <span className="entry-date block font-3-4 c-lt-gray">

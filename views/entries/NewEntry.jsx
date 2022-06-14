@@ -1,9 +1,9 @@
 const React = require('react');
 const Layout = require('../Layout');
 
-module.exports = function NewEntry() {
+module.exports = function NewEntry({ username }) {
   return (
-    <Layout>
+    <Layout username={username}>
       <h1>Let broccoli be your muse ...</h1>
 
       <form method="post" action="/entries">

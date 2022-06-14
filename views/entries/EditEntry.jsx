@@ -1,9 +1,9 @@
 const React = require('react');
 const Layout = require('../Layout');
 
-module.exports = function EditEntry({ entry }) {
+module.exports = function EditEntry({ username, entry }) {
   return (
-    <Layout>
+    <Layout username={username}>
       <h1>Revise your thoughts on broccoli ...</h1>
 
       <form id="editEntryForm" data-entryid={entry.id}>
