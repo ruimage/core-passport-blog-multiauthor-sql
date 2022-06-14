@@ -11,6 +11,7 @@ const path = require('path');
 // Импортируем созданный в отдельный файлах рутеры.
 const indexRouter = require('./routes/index');
 const entriesRouter = require('./routes/entries');
+const authRouter = require('./routes/auth');
 const Error = require('./views/Error');
 
 const app = express();
@@ -31,6 +32,7 @@ app.use(express.json());
 
 app.use('/', indexRouter);
 app.use('/entries', entriesRouter);
+app.use('/auth', authRouter);
 
 // Если HTTP-запрос дошёл до этой строчки, значит ни один из ранее встречаемых рутов не ответил
 // на запрос.Это значит, что искомого раздела просто нет на сайте.Для таких ситуаций используется
@@ -40,7 +42,7 @@ app.use((req, res, next) => {
   next(error);
 });
 
-// Отлавливаем HTTP-запрос с ошибкой и отправляем на него ответ.
+// Отлавл7иваем HTTP-запрос с ошибкой и отправляем на него ответ.
 app.use((err, req, res) => {
   // Получаем текущий ражим работы приложения.
   const appMode = req.app.get('env');
